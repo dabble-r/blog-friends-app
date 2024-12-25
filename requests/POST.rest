@@ -1,0 +1,10 @@
+POST http://localhost:3002/api/blogs HTTP/1.1
+Content-Type: application/json 
+
+{
+  "id": "",
+  "user": "Nicholas Brou",
+  "comment": "Hello World! - POST - test",
+  "date": null,
+  "likes": 0
+}
