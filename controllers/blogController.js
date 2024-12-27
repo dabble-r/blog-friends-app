@@ -58,6 +58,7 @@ const updateBlog = async (req, res, next) => {
 
 const deleteBlog = async (req, res, next) => {
     try {
+        // catch a malformed or invlaid ID
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             console.log('Invalid Blog ID!');
             return res.status(400).send('Invalid Blog ID!');
