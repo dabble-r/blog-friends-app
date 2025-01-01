@@ -11,6 +11,18 @@ const getBlogs = async (req, res) => {
     }
 }
 
+const getOneBlog = async (req, res) => {
+    const id = req.params.id
+    try {
+        const blog = await Blog.findById(id)
+        res.json(blog)
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
 const createBlog = async (req, res, next) => {
     const body = req.body
     if (!body.user || !body.comment) {
@@ -40,20 +52,25 @@ const createBlog = async (req, res, next) => {
 }
 
 const updateBlog = async (req, res, next) => {
-    const { user, date, comment, likes } = req.body
-    const id = req.params.id
-    
-    Blog.findByIdAndUpdate(
-        id, 
-        { user, date, comment, likes },  
-        { new: true,
-          runValidators: true,
-          context: 'query'
-        })
-        .then(updatedBlog => {
-          res.json(updatedBlog)
-        })
-        .catch(error => next(error))
+    try {
+        const { user, date, comment, likes } = req.body
+        const id = req.params.id
+        
+        const updateBlog = await Blog.findByIdAndUpdate(
+            id, 
+            { user, date, comment, likes },  
+            { new: true,
+              runValidators: true,
+              context: 'query'
+            })
+        if (!updateBlog) {
+            return res.status(404).json({ error: "Blog not found" })
+        }
+        res.json(updatedBlog)
+    } 
+    catch (error) {
+        next(error)
+    }
 }
 
 const deleteBlog = async (req, res, next) => {
@@ -80,6 +97,6 @@ const deleteBlog = async (req, res, next) => {
     }
 }
 
-export { getBlogs, createBlog, updateBlog, deleteBlog }
+export { getBlogs, getOneBlog, createBlog, updateBlog, deleteBlog }
 
 
