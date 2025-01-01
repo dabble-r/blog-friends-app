@@ -66,7 +66,7 @@ const updateBlog = async (req, res, next) => {
         if (!updateBlog) {
             return res.status(404).json({ error: "Blog not found" })
         }
-        res.json(updatedBlog)
+        res.json(updateBlog)
     } 
     catch (error) {
         next(error)
