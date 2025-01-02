@@ -26,7 +26,7 @@ test('blogs are returned as json', async () => {
 })
 
 // checks 'id' prop of each blog is literally id
-test.only('id is really id', async () => {
+test('id is really id', async () => {
   const response = await api.get('/api/blogs')
 
   const blogIDs = response.body.map(el => el.id).filter(el => el != 'id')
@@ -97,6 +97,26 @@ test('blog malformed - invalid not added', async () => {
   const blogsResult = await blogsInDb()
 
   assert.strictEqual(blogsResult.length, initialBlogs.length)  
+})
+
+test.only('likes value - default to zero', async () => {
+  const newBlog = {
+    "user": "Name",
+    "comment": "comment",
+    "likes": "",
+    "date": "today"
+  }
+
+  await api 
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+
+  const response = await blogsInDb()
+  //const test = response[response.length - 1]['likes']
+  const lastBlogLikes = response[response.length - 1]['likes']
+
+  assert.strictEqual(lastBlogLikes, 0)
 })
 
 after(async () => {
