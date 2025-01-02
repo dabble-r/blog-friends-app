@@ -5,6 +5,7 @@ const getBlogs = async (req, res) => {
     try {
         const blogs = await Blog.find({})
         res.json(blogs)
+        //console.log(res.json(blogs))
     } 
     catch (error) {
         res.status(500).json({ message: error.message })
@@ -21,7 +22,6 @@ const getOneBlog = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
-
 
 const createBlog = async (req, res, next) => {
     const body = req.body
@@ -44,7 +44,7 @@ const createBlog = async (req, res, next) => {
     }
     try {
         const savedBlog = await blog.save();
-        res.json(savedBlog);
+        res.json(savedBlog)
     } 
     catch (error) {
         next(error)
