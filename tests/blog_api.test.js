@@ -99,7 +99,7 @@ test('blog malformed - invalid not added', async () => {
   assert.strictEqual(blogsResult.length, initialBlogs.length)  
 })
 
-test.only('likes value - default to zero', async () => {
+test('likes value - default to zero', async () => {
   const newBlog = {
     "user": "Name",
     "comment": "comment",
@@ -117,6 +117,20 @@ test.only('likes value - default to zero', async () => {
   const lastBlogLikes = response[response.length - 1]['likes']
 
   assert.strictEqual(lastBlogLikes, 0)
+})
+
+test('must have user and comment inputs', async () => {
+  const newBlog = {
+    "user": "",
+    "comment": "",
+    "likes": "",
+    "date": ""
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 after(async () => {
