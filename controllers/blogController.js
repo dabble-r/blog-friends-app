@@ -5,7 +5,19 @@ const getBlogs = async (req, res) => {
     try {
         const blogs = await Blog.find({})
         res.json(blogs)
+        //console.log(res.json(blogs))
     } 
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const getOneBlog = async (req, res) => {
+    const id = req.params.id
+    try {
+        const blog = await Blog.findById(id)
+        res.json(blog)
+    }
     catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -13,7 +25,7 @@ const getBlogs = async (req, res) => {
 
 const createBlog = async (req, res, next) => {
     const body = req.body
-    if (!body.user || !body.comment) {
+    if (!body.username || !body.comment) {
         return res.status(400).json({ 
           error: 'must have user and comment' 
         })
@@ -21,18 +33,19 @@ const createBlog = async (req, res, next) => {
     const blog = new Blog (
         {
           id: "",
-          user: body.user,
+          username: body.username,
           date: new Date(),
           comment: body.comment,
           likes: 0
         })
     const error = blog.validateSync()
+
     if (error) {
         return res.status(400).json({ message: error.message })
     }
     try {
         const savedBlog = await blog.save();
-        res.json(savedBlog);
+        res.json(savedBlog)
     } 
     catch (error) {
         next(error)
@@ -40,20 +53,25 @@ const createBlog = async (req, res, next) => {
 }
 
 const updateBlog = async (req, res, next) => {
-    const { user, date, comment, likes } = req.body
-    const id = req.params.id
-    
-    Blog.findByIdAndUpdate(
-        id, 
-        { user, date, comment, likes },  
-        { new: true,
-          runValidators: true,
-          context: 'query'
-        })
-        .then(updatedBlog => {
-          res.json(updatedBlog)
-        })
-        .catch(error => next(error))
+    try {
+        const { user, date, comment, likes } = req.body
+        const id = req.params.id
+        
+        const updateBlog = await Blog.findByIdAndUpdate(
+            id, 
+            { user, date, comment, likes },  
+            { new: true,
+              runValidators: true,
+              context: 'query'
+            })
+        if (!updateBlog) {
+            return res.status(404).json({ error: "Blog not found" })
+        }
+        res.json(updateBlog)
+    } 
+    catch (error) {
+        next(error)
+    }
 }
 
 const deleteBlog = async (req, res, next) => {
@@ -80,6 +98,6 @@ const deleteBlog = async (req, res, next) => {
     }
 }
 
-export { getBlogs, createBlog, updateBlog, deleteBlog }
+export { getBlogs, getOneBlog, createBlog, updateBlog, deleteBlog }
 
 

@@ -1,19 +1,19 @@
 {
   "blog": {
     "id 1": {
-      "name": "John Doe",
+      "user": "John Doe",
       "comment": "",
       "likes": 0,
       "date": ""
     },
     "id 2": {
-      "name": "Jane Doe",
+      "user": "Jane Doe",
       "comment": "",
       "likes": 0,
       "date": ""
     },
     "id 3": {
-      "name": "Jane Doe",
+      "user": "Jane Doe",
       "comment": "",
       "likes": 0,
       "date": ""
