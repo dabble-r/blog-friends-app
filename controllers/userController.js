@@ -14,7 +14,7 @@ const getUsers = async (req, res) => {
 
 const postUser = async (req, res) => {
   try {
-    const { username, name, password } = req.body
+    const { username, name, password, blogs } = req.body
 
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -23,6 +23,7 @@ const postUser = async (req, res) => {
       username,
       name,
       passwordHash,
+      blogs
     })
 
     const savedUser = await user.save()
