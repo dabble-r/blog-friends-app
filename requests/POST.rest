@@ -2,9 +2,23 @@ POST http://localhost:3002/api/blogs HTTP/1.1
 Content-Type: application/json 
 
 {
-  "id": "",
+  "username": "Nicholas Broussard",
+  "comment": "Hello World! - POST - test",
+  "date": null,
+  "likes": 0
+}
+
+###
+
+
+POST http://localhost:3002/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+
   "user": "Nicholas Brou",
   "comment": "Hello World! - POST - test",
   "date": null,
   "likes": 0
+
 }

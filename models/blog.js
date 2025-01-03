@@ -1,11 +1,27 @@
 import mongoose from 'mongoose'
 
+// to implement with furhter updates
+// user authentication
+/*
 const blogSchema = new mongoose.Schema({
-  user: { type: String, required: true },
+  username: { type: String, required: true },
   date: { type: Date, default: Date.now },
   comment: { type: String, required: true },
   likes: { type: Number, default: 0 },
+  user : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
+  */
+
+const blogSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  date: { type: Date, default: Date.now },
+  comment: { type: String, required: true },
+  likes: { type: Number, default: 0 }
+})
+
 
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {

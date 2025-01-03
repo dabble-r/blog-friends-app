@@ -1,6 +1,7 @@
 import express, { json } from 'express'
 import cors from 'cors'
-import router from './routes/blogRoutes.js'
+import blogRouter from './routes/blogRoutes.js'
+import userRouter from './routes/userRoutes.js'
 import { set, connect } from 'mongoose'
 import { MONGODB_URI} from './utils/config.js'
 
@@ -25,6 +26,7 @@ connect(MONGODB_URI)
   app.use(cors())
   //app.use(express.static('dist'))
 
-  app.use('/api/blogs', router)
+  app.use('/api/blogs', blogRouter)
+  app.use('/api/users', userRouter)
 
 export default app

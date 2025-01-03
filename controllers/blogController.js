@@ -25,7 +25,7 @@ const getOneBlog = async (req, res) => {
 
 const createBlog = async (req, res, next) => {
     const body = req.body
-    if (!body.user || !body.comment) {
+    if (!body.username || !body.comment) {
         return res.status(400).json({ 
           error: 'must have user and comment' 
         })
@@ -33,12 +33,13 @@ const createBlog = async (req, res, next) => {
     const blog = new Blog (
         {
           id: "",
-          user: body.user,
+          username: body.username,
           date: new Date(),
           comment: body.comment,
           likes: 0
         })
     const error = blog.validateSync()
+
     if (error) {
         return res.status(400).json({ message: error.message })
     }
