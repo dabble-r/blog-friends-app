@@ -2,6 +2,7 @@ import express, { json } from 'express'
 import cors from 'cors'
 import { blogRouter } from './controllers/blogController.js'
 import { userRouter } from './controllers/userController.js'
+import { loginRouter } from './controllers/loginController.js'
 import { set, connect } from 'mongoose'
 import { MONGODB_URI } from './utils/config.js'
 //import errorHandler from './utils/middleware.js'
@@ -30,5 +31,6 @@ connect(MONGODB_URI)
 
   app.use('/api/blogs', blogRouter)
   app.use('/api/users', userRouter)
+  app.use('/api/login', loginRouter)
 
 export default app
