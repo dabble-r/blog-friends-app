@@ -8,12 +8,12 @@ const blogRouter = express.Router()
 
 const getTokenFrom = (req) => {
     const authorization = req.get('authorization')
-    console.log(authorization)
+    console.log('authorization', authorization)
     if (authorization && authorization.startsWith('Bearer ')) {
       return authorization.replace('Bearer ', '')
     }
     return null
-  }
+}
 
 blogRouter.get('/', async (req, res) => {
     try {
@@ -42,22 +42,22 @@ blogRouter.get('/:id', async (req, res) => {
 blogRouter.post('/', async (req, res, next) => {
 
     const body = req.body
-    // console.log('body', body)
+    console.log('body', body)
     // console.log('body id', body.userId)
     // console.log('body username', body.username)
-
-    if (!body.username || !body.comment) {
-        return res.status(400).json({ 
-          error: 'must have username and comment' 
-        })
-    }
+    console.log('get token from request', getTokenFrom(req))
 
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
     if (!decodedToken.id) {
         return res.status(401).json({ error: 'token invalid' })
     }
     const user = await User.findById(decodedToken.id)
-    console.log(user)
+
+    if (!body.username || !body.comment) {
+        return res.status(400).json({ 
+          error: 'must have username and comment' 
+        })
+    }
 
     // find user to match username who entered new blog item
     // || body._userId || body.id
