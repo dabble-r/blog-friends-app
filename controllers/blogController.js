@@ -33,7 +33,7 @@ blogRouter.post('/', async (req, res, next) => {
 
     const body = req.body
     console.log('body', body)
-    console.log('body id', body.user)
+    console.log('body id', body.userId)
     console.log('body username', body.username)
 
     if (!body.username || !body.comment) {
@@ -42,7 +42,9 @@ blogRouter.post('/', async (req, res, next) => {
         })
     }
     // find user to match username who entered new blog item
-    const user = await User.findById(body.user)
+    // || body._userId || body.id
+    const userID = body.userId 
+    const user = await User.findById(userID)
 
     // user still returns null
     console.log('user found', user)
@@ -103,7 +105,8 @@ blogRouter.delete('/:id', async (req, res, next) => {
     try {
         // catch a malformed or invlaid ID
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            console.log('Invalid Blog ID!');
+            console.log('Invalid Blog ID!')
+            console.log('id',req.params.id)
             return res.status(400).send('Invalid Blog ID!');
         }
         // Find the blog by ID
@@ -122,6 +125,22 @@ blogRouter.delete('/:id', async (req, res, next) => {
         next(error)
     }
 })
+
+blogRouter.delete('/', async (req, res, next) => {
+    try {
+        
+        // Delete all the blogs
+        const blogs = await Blog.deleteMany({})
+        console.log(`all ${blogs.deletedCount} blogs deleted!`)
+
+        res.status(200).send('all blogs deleted!')
+    }
+    catch (error) {
+        console.error('Error deleting all the blogs: ', error.message)
+        next(error)
+    }
+})
+
 
 // export { getBlogs, getOneBlog, createBlog, updateBlog, deleteBlog }
 export { blogRouter }

@@ -4,6 +4,7 @@ import { blogRouter } from './controllers/blogController.js'
 import { userRouter } from './controllers/userController.js'
 import { set, connect } from 'mongoose'
 import { MONGODB_URI } from './utils/config.js'
+//import errorHandler from './utils/middleware.js'
 
 set('strictQuery', false)
 
@@ -13,6 +14,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
+//app.use(errorHandler())
 
 // Connect to MongoDB
 connect(MONGODB_URI)

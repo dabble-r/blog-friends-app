@@ -2,11 +2,11 @@ POST http://localhost:3002/api/blogs HTTP/1.1
 Content-Type: application/json 
 
 {
-  "username": "nbroussard",
-  "comment": "post 2",
+  "username": "nbroussard - 3",
+  "comment": "post 43",
   "date": "",
   "likes": 0,
-  "user": "677962e2b5d532d05e527b9c"
+  "userId": "67796a0470e786c9695ce885"
 }
 
 ###
