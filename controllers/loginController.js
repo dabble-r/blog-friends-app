@@ -5,8 +5,9 @@ import User from '../models/user.js'
 
 const loginRouter = express.Router()
 
-loginRouter.post('/', async (request, response) => {
-  const { username, password } = request.body
+loginRouter.post('/', async (req, res) => {
+  const { username, password } = req.body
+  console.log('username', username)
 
   const user = await User.findOne({ username })
   const passwordCorrect = user === null
@@ -14,7 +15,7 @@ loginRouter.post('/', async (request, response) => {
     : await bcrypt.compare(password, user.passwordHash)
 
   if (!(user && passwordCorrect)) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: 'invalid username or password'
     })
   }
@@ -26,7 +27,7 @@ loginRouter.post('/', async (request, response) => {
 
   const token = jwt.sign(userForToken, process.env.SECRET)
 
-  response
+  res
     .status(200)
     .send({ token, username: user.username, name: user.name })
 })

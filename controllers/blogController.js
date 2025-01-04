@@ -2,8 +2,18 @@ import Blog from '../models/blog.js'
 import User from '../models/user.js'
 import mongoose from 'mongoose'
 import express from 'express'
+import jwt from 'jsonwebtoken'
 
 const blogRouter = express.Router()
+
+const getTokenFrom = (req) => {
+    const authorization = req.get('authorization')
+    console.log(authorization)
+    if (authorization && authorization.startsWith('Bearer ')) {
+      return authorization.replace('Bearer ', '')
+    }
+    return null
+  }
 
 blogRouter.get('/', async (req, res) => {
     try {
@@ -32,19 +42,27 @@ blogRouter.get('/:id', async (req, res) => {
 blogRouter.post('/', async (req, res, next) => {
 
     const body = req.body
-    console.log('body', body)
-    console.log('body id', body.userId)
-    console.log('body username', body.username)
+    // console.log('body', body)
+    // console.log('body id', body.userId)
+    // console.log('body username', body.username)
 
     if (!body.username || !body.comment) {
         return res.status(400).json({ 
           error: 'must have username and comment' 
         })
     }
+
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
+    console.log(user)
+
     // find user to match username who entered new blog item
     // || body._userId || body.id
-    const userID = body.userId 
-    const user = await User.findById(userID)
+    // const userID = body.userId 
+    // const user = await User.findById(userID)
 
     // user still returns null
     console.log('user found', user)
