@@ -1,1 +1,5 @@
-GET http://localhost:3002/api/blogs/ HTTP/1.1
+GET http://localhost:3002/api/blogs/67796bae2d35774295064e5f HTTP/1.1
+
+###
+
+GET http://localhost:3002/api/users/677962dbb5d532d05e527b9a HTTP/1.1

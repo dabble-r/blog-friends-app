@@ -7,7 +7,9 @@ const blogRouter = express.Router()
 
 blogRouter.get('/', async (req, res) => {
     try {
-        const blogs = await Blog.find({})
+        const blogs = await Blog
+            .find({})
+            .populate('user', { "username": 1, "name": 1, "id": 1 })
         console.log(blogs)
         res.json(blogs)
     } 
@@ -28,17 +30,24 @@ blogRouter.get('/:id', async (req, res) => {
 })
 
 blogRouter.post('/', async (req, res, next) => {
+
     const body = req.body
+    console.log('body', body)
+    console.log('body id', body.user)
+    console.log('body username', body.username)
+
     if (!body.username || !body.comment) {
         return res.status(400).json({ 
           error: 'must have username and comment' 
         })
     }
     // find user to match username who entered new blog item
-    const user = await User.findById(body.id)
+    const user = await User.findById(body.user)
+
     // user still returns null
     console.log('user found', user)
     console.log('user id key:value', user.id)
+
     const blog = new Blog (
         {
           username: body.username,
@@ -47,6 +56,7 @@ blogRouter.post('/', async (req, res, next) => {
           likes: 0,
           user: user.id // add 'user': 'user.id' key:value -- one who entered new blog item
         })
+
     const error = blog.validateSync()
 
     console.log('post schema blog', blog)

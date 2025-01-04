@@ -42,10 +42,11 @@ describe('test for all blogs resources', () => {
 describe('test for one valid/malformed blogs resource', () => {
   // tests for blog prop 
   // checks 'id' prop of each blog is literally id
-  test('id is really id', async () => {
+  test.only('id is really id', async () => {
     const response = await api.get('/api/blogs')
 
     const blogIDs = response.body.map(el => el.id).filter(el => el != 'id')
+    console.log(blogIDS)
 
     assert.strictEqual(response.body.length, blogIDs.length)
   })
