@@ -2,22 +2,21 @@ POST http://localhost:3002/api/blogs HTTP/1.1
 Content-Type: application/json 
 
 {
-  "username": "Nicholas Broussard",
-  "comment": "Hello World! - POST - test",
+  "username": "nbroussard - 1",
+  "comment": "Hello World! - POST - test - 9",
   "date": null,
-  "likes": 0
+  "likes": 0,
+  "id": "6778a4c980fee581d845000f"
 }
 
-
 ###
-
 
 POST http://localhost:3002/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "Nicholas Broussard",
+  "username": "nbroussard - 1",
   "name": "Nick",
-  "password": "password",
-  "blogs": ["67782f3615ddb502ba6a60e5"]
+  "password": "pWord!",
+  "blogs": []
 }

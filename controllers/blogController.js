@@ -1,18 +1,22 @@
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
 import mongoose from 'mongoose'
+import express from 'express'
 
-const getBlogs = async (req, res) => {
+const blogRouter = express.Router()
+
+blogRouter.get('/', async (req, res) => {
     try {
         const blogs = await Blog.find({})
+        console.log(blogs)
         res.json(blogs)
-        //console.log(res.json(blogs))
     } 
     catch (error) {
         res.status(500).json({ message: error.message })
     }
-}
+})
 
-const getOneBlog = async (req, res) => {
+blogRouter.get('/:id', async (req, res) => {
     const id = req.params.id
     try {
         const blog = await Blog.findById(id)
@@ -21,38 +25,49 @@ const getOneBlog = async (req, res) => {
     catch (error) {
         res.status(500).json({ message: error.message })
     }
-}
+})
 
-const createBlog = async (req, res, next) => {
+blogRouter.post('/', async (req, res, next) => {
     const body = req.body
     if (!body.username || !body.comment) {
         return res.status(400).json({ 
-          error: 'must have user and comment' 
+          error: 'must have username and comment' 
         })
     }
+    // find user to match username who entered new blog item
+    const user = await User.findById(body.id)
+    // user still returns null
+    console.log('user found', user)
+    console.log('user id key:value', user.id)
     const blog = new Blog (
         {
-          id: "",
           username: body.username,
           date: new Date(),
           comment: body.comment,
-          likes: 0
+          likes: 0,
+          user: user.id // add 'user': 'user.id' key:value -- one who entered new blog item
         })
     const error = blog.validateSync()
 
+    console.log('post schema blog', blog)
     if (error) {
         return res.status(400).json({ message: error.message })
     }
     try {
-        const savedBlog = await blog.save();
+        const savedBlog = await blog.save()
+        console.log('saved blog', savedBlog)
+        // user blogs array 
+        // concat new blog item
+        user.blogs = user.blogs.concat(savedBlog._id)
+        await user.save()
         res.json(savedBlog)
     } 
     catch (error) {
         next(error)
     }
-}
+})
 
-const updateBlog = async (req, res, next) => {
+blogRouter.put('/:id', async (req, res, next) => {
     try {
         const { user, date, comment, likes } = req.body
         const id = req.params.id
@@ -72,9 +87,9 @@ const updateBlog = async (req, res, next) => {
     catch (error) {
         next(error)
     }
-}
+})
 
-const deleteBlog = async (req, res, next) => {
+blogRouter.delete('/:id', async (req, res, next) => {
     try {
         // catch a malformed or invlaid ID
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -96,8 +111,9 @@ const deleteBlog = async (req, res, next) => {
         console.error('Error deleting the blog: ', error.message)
         next(error)
     }
-}
+})
 
-export { getBlogs, getOneBlog, createBlog, updateBlog, deleteBlog }
+// export { getBlogs, getOneBlog, createBlog, updateBlog, deleteBlog }
+export { blogRouter }
 
 

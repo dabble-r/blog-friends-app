@@ -1,9 +1,9 @@
 import express, { json } from 'express'
 import cors from 'cors'
-import blogRouter from './routes/blogRoutes.js'
-import userRouter from './routes/userRoutes.js'
+import { blogRouter } from './controllers/blogController.js'
+import { userRouter } from './controllers/userController.js'
 import { set, connect } from 'mongoose'
-import { MONGODB_URI} from './utils/config.js'
+import { MONGODB_URI } from './utils/config.js'
 
 set('strictQuery', false)
 
