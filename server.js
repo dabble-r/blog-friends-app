@@ -5,7 +5,7 @@ import { userRouter } from './controllers/userController.js'
 import { loginRouter } from './controllers/loginController.js'
 import { set, connect } from 'mongoose'
 import { MONGODB_URI } from './utils/config.js'
-//import errorHandler from './utils/middleware.js'
+import { extractToken } from './utils/middleware.js'
 
 set('strictQuery', false)
 
@@ -15,7 +15,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
-//app.use(errorHandler())
+app.use(extractToken)
+//app.use(requestLogger())
+
 
 // Connect to MongoDB
 connect(MONGODB_URI)
@@ -26,7 +28,6 @@ connect(MONGODB_URI)
     console.log('error connecting to MongoDB:', error.message)
   })
 
-  app.use(cors())
   //app.use(express.static('dist'))
 
   app.use('/api/blogs', blogRouter)

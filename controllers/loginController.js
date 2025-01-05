@@ -7,7 +7,7 @@ const loginRouter = express.Router()
 
 loginRouter.post('/', async (req, res) => {
   const { username, password } = req.body
-  console.log('username', username)
+  // console.log('username', username)
 
   const user = await User.findOne({ username })
   const passwordCorrect = user === null
@@ -25,6 +25,7 @@ loginRouter.post('/', async (req, res) => {
     id: user._id,
   }
 
+  // token: nbroussard
   const token = jwt.sign(userForToken, process.env.SECRET)
 
   res

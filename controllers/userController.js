@@ -8,8 +8,8 @@ userRouter.get('/', async (req, res) => {
   try {
       const users = await User.find({}).populate('blogs', {'comment': 1, 'likes': 1})
       const IDs = users.map(el => el.id)
-      console.log('ids', IDs)
-      console.log('users', users)
+      // console.log('ids', IDs)
+      // console.log('users', users)
       res.json(users)
       //console.log(res.json(blogs))
   } 

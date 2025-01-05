@@ -6,21 +6,23 @@ import jwt from 'jsonwebtoken'
 
 const blogRouter = express.Router()
 
+/*
 const getTokenFrom = (req) => {
     const authorization = req.get('authorization')
-    console.log('authorization', authorization)
+    // console.log('authorization', authorization)
     if (authorization && authorization.startsWith('Bearer ')) {
       return authorization.replace('Bearer ', '')
     }
     return null
 }
+*/
 
 blogRouter.get('/', async (req, res) => {
     try {
         const blogs = await Blog
             .find({})
             .populate('user', { "username": 1, "name": 1, "id": 1 })
-        console.log(blogs)
+        // console.log(blogs)
         res.json(blogs)
     } 
     catch (error) {
@@ -30,8 +32,19 @@ blogRouter.get('/', async (req, res) => {
 
 blogRouter.get('/:id', async (req, res) => {
     const id = req.params.id
+    const token = req.token
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    
+        console.log('token', token)
+        console.log('decoded token', decodedToken)
     try {
         const blog = await Blog.findById(id)
+        const userAccess = decodedToken.id
+        if (blog.user = userAccess) {
+            console.log('match!')
+        } else {
+            console.log('no match!')
+        }
         res.json(blog)
     }
     catch (error) {
@@ -42,12 +55,13 @@ blogRouter.get('/:id', async (req, res) => {
 blogRouter.post('/', async (req, res, next) => {
 
     const body = req.body
-    console.log('body', body)
+    // console.log('body', body)
     // console.log('body id', body.userId)
     // console.log('body username', body.username)
-    console.log('get token from request', getTokenFrom(req))
-
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    // console.log('token from request', req.headers.authorization)
+        console.log('token from request header', req.token)
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        console.log('decoded token', decodedToken)
     if (!decodedToken.id) {
         return res.status(401).json({ error: 'token invalid' })
     }
@@ -65,8 +79,8 @@ blogRouter.post('/', async (req, res, next) => {
     // const user = await User.findById(userID)
 
     // user still returns null
-    console.log('user found', user)
-    console.log('user id key:value', user.id)
+    // console.log('user found', user)
+    // console.log('user id key:value', user.id)
 
     const blog = new Blog (
         {
@@ -79,13 +93,13 @@ blogRouter.post('/', async (req, res, next) => {
 
     const error = blog.validateSync()
 
-    console.log('post schema blog', blog)
+    // console.log('post schema blog', blog)
     if (error) {
         return res.status(400).json({ message: error.message })
     }
     try {
         const savedBlog = await blog.save()
-        console.log('saved blog', savedBlog)
+        // console.log('saved blog', savedBlog)
         // user blogs array 
         // concat new blog item
         user.blogs = user.blogs.concat(savedBlog._id)
@@ -121,24 +135,65 @@ blogRouter.put('/:id', async (req, res, next) => {
 
 blogRouter.delete('/:id', async (req, res, next) => {
     try {
-        // catch a malformed or invlaid ID
+        const token = req.token
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+
+        // catch a malformed or invalid ID
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             console.log('Invalid Blog ID!')
-            console.log('id',req.params.id)
-            return res.status(400).send('Invalid Blog ID!');
+            console.log('id', req.params.id)
+            return res.status(400).send('Invalid Blog ID!')
         }
+
+        /*
+        // catch an invalid token
+        if (!tokenReq) {
+            console.log('Invalid User Token!')
+            console.log('token', tokenReq)
+            return res.status(400).send('Invalid token!')
+        }
+        */
+
         // Find the blog by ID
-        const blog = await Blog.findById(req.params.id);
+        const blog = await Blog.findById(req.params.id)
+
         if (!blog) {
             console.log("Blog doesn't exist!");
             return res.status(200).send('Blog already deleted or not found!');
         }
-        // Delete the blog
-        await Blog.findByIdAndDelete(req.params.id)
-        console.log('Blog deleted!')
-        res.status(200).send('Blog deleted!')
+            console.log('blog to delete', blog)
+        const userAccess = decodedToken.id
+        const blogItemUser = blog.user.toString()
+            console.log('user access id', userAccess)
+            console.log('blog item user id', blogItemUser)
+        if (blogItemUser == userAccess) {
+            console.log('match!')
+            // Delete the blog
+            await Blog.findByIdAndDelete(req.params.id)
+            console.log('Blog deleted!')
+            res.status(200).send('Blog deleted!')
+        } 
+        else {
+            console.log('no user access!')
+            res.status(404).json({ error: "User does not have access!" })
+        }
+
+        // confirm user delete is same as user post
+        // process:
+            // take username from blog item
+            // take id from blog item
+            // find user in DB from username
+            // take userID from user item
+            // check if blog item/id exists in the blogs array of 
+            // associated user/username/userId
+        /*
+        if (!blog.user.id != body.userId) {
+            console.log('invalid user access', blog.user.userId)
+            return res.status(400).send('Invalid User Access')
+        }*/
     }
     catch (error) {
+        
         console.error('Error deleting the blog: ', error.message)
         next(error)
     }
