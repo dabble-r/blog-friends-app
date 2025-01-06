@@ -1,10 +1,10 @@
 POST http://localhost:3002/api/blogs HTTP/1.1
 Content-Type: application/json 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5icm91c3NhcmQgLSAyIiwiaWQiOiI2NzdhYzY1OTZlNjU0N2Q5NDQ5NGU5NDQiLCJpYXQiOjE3MzYxODIxMjZ9.MkjZ-6QVoghu-Fchi-DrkCvIgr7KjAlSsjUzQO-IqI4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5icm91c3NhcmQgLSAyIiwiaWQiOiI2NzdhYzY1OTZlNjU0N2Q5NDQ5NGU5NDQiLCJpYXQiOjE3MzYxODMxNjd9.Lhv5dRo4jMkn-VjkfYMffcrlydCnnp1DlO4qCISdFVU
 
 {
   "username": "nbroussard - 2",
-  "comment": "post 56 - user 2",
+  "comment": "post 17 - user 2",
   "date": "",
   "likes": 0,
   "userId": "677ac6596e6547d94494e944"

@@ -179,7 +179,7 @@ blogRouter.delete('/:id', async (req, res, next) => {
         } 
         else {
             console.log('no user access!')
-            res.status(404).json({ error: "User does not have access!" })
+            res.status(401).json({ error: "Unauthorized: User does not have access!" })
         }
 
         // confirm user delete is same as user post

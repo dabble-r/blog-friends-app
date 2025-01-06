@@ -1,7 +1,11 @@
 import { usersInDb } from '../utils/tests_helper.js'
 import mongoose from 'mongoose'
+import supertest from 'supertest'
+import app from '../server.js'
 import { test, after, beforeEach, describe } from 'node:test'
 import assert from 'node:assert'
+
+const api = supertest(app)
 
 describe('when there is initially one user in db', () => {
   /*
@@ -15,7 +19,7 @@ describe('when there is initially one user in db', () => {
   })
   */
 
-  test.only('creation succeeds with a fresh username', async () => {
+  test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await usersInDb()
 
     const newUser = {
@@ -37,7 +41,9 @@ describe('when there is initially one user in db', () => {
     assert(usernames.includes(newUser.username))
   })
 
-  after(async () => {
-    await mongoose.connection.close()
-  })
+ 
+})
+
+after(async () => {
+  await mongoose.connection.close()
 })

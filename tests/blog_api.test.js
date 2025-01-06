@@ -3,6 +3,7 @@ import assert from 'node:assert'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../server.js'
+import jwt from 'jsonwebtoken'
 import { initialBlogs, nonExistingId, blogsInDb } from '../utils/tests_helper.js'
 
 const api = supertest(app)
@@ -151,6 +152,8 @@ describe('tests for one specific blogs resource', () => {
     assert(firstElContents.includes('I like Jason because he travels to places.'))
   })
 })
+
+
 
 after(async () => {
   await mongoose.connection.close()
