@@ -7,9 +7,9 @@ const userRouter = express.Router()
 userRouter.get('/', async (req, res) => {
   try {
       const users = await User.find({}).populate('blogs', {'comment': 1, 'likes': 1})
-      const IDs = users.map(el => el.id)
+      const findUser = users.map(el => el.username == "nbroussard - 1")
       // console.log('ids', IDs)
-      // console.log('users', users)
+      console.log('user found', findUser)
       res.json(users)
       //console.log(res.json(blogs))
   } 

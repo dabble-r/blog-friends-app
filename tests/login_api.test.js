@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../server.js'
 import jwt from 'jsonwebtoken'
-import { initialBlogs, nonExistingId, blogsInDb } from '../utils/tests_helper.js'
+import { usersInDb } from '../utils/tests_helper.js'
 
 const api = supertest(app)
 
@@ -40,6 +40,34 @@ describe('user auth - token tests', async (req, res) => {
     const token = jwt.sign(user, process.env.SECRET)
 
     assert(Boolean(token) == true)
+  })
+
+  test('user exists', async () => {
+    const user = 
+      {
+        "username": "nbroussard - 3",
+        "password": "pWord!"
+      }
+    
+    const users = (await usersInDb()).map(el => el.username)
+    
+    const findUser = users.includes(user.username)
+
+    assert(Boolean(findUser) == true)
+  })
+
+  test('user password correct', async () => {
+    const user = 
+      {
+        "username": "nbroussard - 3",
+        "password": "pWord!"
+      }
+    // array of all users in DB
+    const users = await usersInDb()
+    // confirm the specific user exists in DB
+    const findUser = users.filter(el => el.username == user.username)
+    // confirm that one user is found/findUser array length == 1
+    assert.strictEqual(findUser.length, 1)
   })
 })
 
