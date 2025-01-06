@@ -161,11 +161,15 @@ blogRouter.delete('/:id', async (req, res, next) => {
             console.log("Blog doesn't exist!");
             return res.status(200).send('Blog already deleted or not found!');
         }
-            console.log('blog to delete', blog)
-        const userAccess = decodedToken.id
+        console.log('blog to delete', blog)
+        // decoded token of user making request
+        const userAccess = req.decodedToken
+        // user id of the blog item being accessed
         const blogItemUser = blog.user.toString()
-            console.log('user access id', userAccess)
-            console.log('blog item user id', blogItemUser)
+        console.log('user access id', userAccess)
+        console.log('blog item user id', blogItemUser)
+
+        // check the blog item user id against the user id accessing blog item
         if (blogItemUser == userAccess) {
             console.log('match!')
             // Delete the blog
@@ -193,7 +197,6 @@ blogRouter.delete('/:id', async (req, res, next) => {
         }*/
     }
     catch (error) {
-        
         console.error('Error deleting the blog: ', error.message)
         next(error)
     }

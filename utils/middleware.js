@@ -16,7 +16,9 @@ const extractToken = (req, res, next) => {
   console.log('authorization header:', authorization);
   
   if (authorization && authorization.startsWith('Bearer ')) {
-    req.token = authorization.replace('Bearer ', '');
+    req.token = authorization.replace('Bearer ', '')
+    req.decodedToken = jwt.verify(req.token, process.env.SECRET)
+    console.log('decoded token from request', req.decodedToken)
   } else {
     req.token = null; // Explicitly set to null if no valid token found
   }

@@ -15,7 +15,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
-app.use(extractToken)
+//app.use(extractToken)
 //app.use(requestLogger())
 
 
@@ -30,7 +30,7 @@ connect(MONGODB_URI)
 
   //app.use(express.static('dist'))
 
-  app.use('/api/blogs', blogRouter)
+  app.use('/api/blogs', extractToken, blogRouter)
   app.use('/api/users', userRouter)
   app.use('/api/login', loginRouter)
 
