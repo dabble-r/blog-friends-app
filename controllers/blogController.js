@@ -204,12 +204,15 @@ blogRouter.delete('/:id', async (req, res, next) => {
 
 blogRouter.delete('/', async (req, res, next) => {
     try {
-        
         // Delete all the blogs
         const blogs = await Blog.deleteMany({})
         console.log(`all ${blogs.deletedCount} blogs deleted!`)
-
-        res.status(200).send('all blogs deleted!')
+        // empty blogs arrays of all users
+        const users = await User.updateMany({}, {$set: {blogs: []}})
+        
+        console.log(users)
+        
+        res.status(200).send('all blogs deletedm from Blogs cluster and User arrays !')
     }
     catch (error) {
         console.error('Error deleting all the blogs: ', error.message)
