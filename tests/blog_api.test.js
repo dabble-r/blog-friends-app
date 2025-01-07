@@ -36,6 +36,15 @@ describe('test for all blogs resources', () => {
 
     assert.strictEqual(response.body.length, initialBlogs.length)
   })
+
+  // test for get all returns correct number of blog items from DB
+  test('total blogs returned - correct count/length', async () => {
+    const blogsRes = await api.get('/api/blogs')
+      
+    const blogsDB = await blogsInDb()
+
+    assert.strictEqual(blogsRes.body.length, blogsDB.length)
+  })
 })
 
 //////////////////////////////////////////////////////////////////////
@@ -43,11 +52,11 @@ describe('test for all blogs resources', () => {
 describe('test for one valid/malformed blogs resource', () => {
   // tests for blog prop 
   // checks 'id' prop of each blog is literally id
-  test.only('id is really id', async () => {
+  test('d is really id', async () => {
     const response = await api.get('/api/blogs')
 
     const blogIDs = response.body.map(el => el.id).filter(el => el != 'id')
-    console.log(blogIDS)
+    //console.log(blogIDS)
 
     assert.strictEqual(response.body.length, blogIDs.length)
   })
