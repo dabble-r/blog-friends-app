@@ -115,6 +115,16 @@ blogRouter.post('/', async (req, res, next) => {
 
 blogRouter.put('/:id', async (req, res, next) => {
     try {
+        const decodedToken = req.decodedToken
+        console.log('decoded token - delete', decodedToken)
+
+        // catch an invalid token
+        if (!decodedToken) {
+            console.log('Invalid User Token!')
+            console.log('decoded token', decodedToken)
+            return res.status(400).send('Invalid token!')
+        }
+
         const { user, date, comment, likes } = req.body
         const id = req.params.id
         
@@ -127,6 +137,10 @@ blogRouter.put('/:id', async (req, res, next) => {
             })
         if (!updateBlog) {
             return res.status(404).json({ error: "Blog not found" })
+        }
+
+        if (updateBlog.user != decodedToken.id) {
+            return res.status(401).json({ error: "Unauthorized Access!" })
         }
         res.json(updateBlog)
     } 
@@ -191,7 +205,6 @@ blogRouter.delete('/:id', async (req, res, next) => {
             // take userID from user item
             // check if blog item/id exists in the blogs array of 
             // associated user/username/userId
-    
     }
     catch (error) {
         console.error('Error deleting the blog: ', error.message)
