@@ -32,19 +32,21 @@ blogRouter.get('/', async (req, res) => {
 
 blogRouter.get('/:id', async (req, res) => {
     const id = req.params.id
-    const token = req.token
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    //const token = req.token
+    //const decodedToken = jwt.verify(token, process.env.SECRET)
     
-        console.log('token', token)
-        console.log('decoded token', decodedToken)
+        //console.log('token', token)
+        //console.log('decoded token', decodedToken)
     try {
         const blog = await Blog.findById(id)
-        const userAccess = decodedToken.id
+        //const userAccess = decodedToken.id
+        /*
         if (blog.user = userAccess) {
             console.log('match!')
         } else {
             console.log('no match!')
         }
+        */
         res.json(blog)
     }
     catch (error) {
