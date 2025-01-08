@@ -13,12 +13,14 @@ const requestLogger = (request, response, next) => {
 
 const extractToken = (req, res, next) => {
   const authorization = req.get('authorization');
-  console.log('authorization header:', authorization);
+  //console.log('authorization header:', authorization);
   
   if (authorization && authorization.startsWith('Bearer ')) {
+    // console.log('extract reaches if statement/block')
     req.token = authorization.replace('Bearer ', '')
+    //console.log('req token', req.token)
     req.decodedToken = jwt.verify(req.token, process.env.SECRET)
-    console.log('decoded token from request', req.decodedToken)
+    console.log(' token decoded - request', req.decodedToken)
   } else {
     req.token = null; // Explicitly set to null if no valid token found
   }

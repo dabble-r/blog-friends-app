@@ -61,9 +61,9 @@ blogRouter.post('/', async (req, res, next) => {
     // console.log('body id', body.userId)
     // console.log('body username', body.username)
     // console.log('token from request', req.headers.authorization)
-        console.log('token from request header', req.token)
+    console.log('token from request header', req.token)
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
-        console.log('decoded token', decodedToken)
+    console.log('decoded token', decodedToken)
     if (!decodedToken.id) {
         return res.status(401).json({ error: 'token invalid' })
     }
@@ -136,9 +136,10 @@ blogRouter.put('/:id', async (req, res, next) => {
 })
 
 blogRouter.delete('/:id', async (req, res, next) => {
+    
     try {
-        const token = req.token
-        const decodedToken = jwt.verify(token, process.env.SECRET)
+        const decodedToken = req.decodedToken
+        console.log('decoded token - delete', decodedToken)
 
         // catch a malformed or invalid ID
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -147,14 +148,12 @@ blogRouter.delete('/:id', async (req, res, next) => {
             return res.status(400).send('Invalid Blog ID!')
         }
 
-        /*
         // catch an invalid token
-        if (!tokenReq) {
+        if (!decodedToken) {
             console.log('Invalid User Token!')
-            console.log('token', tokenReq)
+            console.log('decoded token', decodedToken)
             return res.status(400).send('Invalid token!')
         }
-        */
 
         // Find the blog by ID
         const blog = await Blog.findById(req.params.id)
@@ -165,7 +164,7 @@ blogRouter.delete('/:id', async (req, res, next) => {
         }
         console.log('blog to delete', blog)
         // decoded token of user making request
-        const userAccess = req.decodedToken
+        const userAccess = req.decodedToken.id
         // user id of the blog item being accessed
         const blogItemUser = blog.user.toString()
         console.log('user access id', userAccess)
@@ -192,16 +191,14 @@ blogRouter.delete('/:id', async (req, res, next) => {
             // take userID from user item
             // check if blog item/id exists in the blogs array of 
             // associated user/username/userId
-        /*
-        if (!blog.user.id != body.userId) {
-            console.log('invalid user access', blog.user.userId)
-            return res.status(400).send('Invalid User Access')
-        }*/
+    
     }
     catch (error) {
         console.error('Error deleting the blog: ', error.message)
         next(error)
     }
+    
+   next()
 })
 
 blogRouter.delete('/', async (req, res, next) => {
