@@ -55,7 +55,6 @@ blogRouter.get('/:id', async (req, res) => {
 })
 
 blogRouter.post('/', async (req, res, next) => {
-
     const body = req.body
     // console.log('body', body)
     // console.log('body id', body.userId)
@@ -114,10 +113,12 @@ blogRouter.post('/', async (req, res, next) => {
 })
 
 blogRouter.put('/:id', async (req, res, next) => {
+    console.log('req token', req.headers.Authorization)
+    
     try {
-        const decodedToken = req.decodedToken
-        console.log('decoded token - delete', decodedToken)
-
+        console.log('token from request header', req.token)
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        
         // catch an invalid token
         if (!decodedToken) {
             console.log('Invalid User Token!')
@@ -147,6 +148,7 @@ blogRouter.put('/:id', async (req, res, next) => {
     catch (error) {
         next(error)
     }
+    
 })
 
 blogRouter.delete('/:id', async (req, res, next) => {
@@ -210,7 +212,6 @@ blogRouter.delete('/:id', async (req, res, next) => {
         console.error('Error deleting the blog: ', error.message)
         next(error)
     }
-    
    next()
 })
 
