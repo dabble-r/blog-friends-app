@@ -150,6 +150,13 @@ blogRouter.put('/:id', async (req, res, next) => {
                 console.log('You can only like/dislike someone else\'s comment!')
                 return res.status(401).json({error: "Likes Change - ID match"})
             }
+            const updateBlog = await Blog.findByIdAndUpdate(
+                id, 
+                { user, date, comment, likes },  
+                { new: true,
+                  runValidators: true,
+                  context: 'query'
+            })
         }
         
         if (origLikes == likes) {
@@ -157,6 +164,13 @@ blogRouter.put('/:id', async (req, res, next) => {
                 console.log('You can only update your own comments!')
                 return res.status(401).json({ error: "No Likes Change - ID no match user/blog" })
             } 
+            const updateBlog = await Blog.findByIdAndUpdate(
+                id, 
+                { user, date, comment, likes },  
+                { new: true,
+                  runValidators: true,
+                  context: 'query'
+            })
         }
         
         if (!updateBlog) {
