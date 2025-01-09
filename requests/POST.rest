@@ -1,24 +1,44 @@
 POST http://localhost:3002/api/blogs HTTP/1.1
 Content-Type: application/json 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5icm91c3NhcmQgLSAyIiwiaWQiOiI2NzdhYzY1OTZlNjU0N2Q5NDQ5NGU5NDQiLCJpYXQiOjE3MzYxODMxNjd9.Lhv5dRo4jMkn-VjkfYMffcrlydCnnp1DlO4qCISdFVU
 
 {
-  "username": "Nicholas Broussard",
-  "comment": "Hello World! - POST - test",
-  "date": null,
-  "likes": 0
+  "username": "nbroussard - 3",
+  "comment": "post 1",
+  "date": "",
+  "likes": 0,
+  "userId": "677c0af380f082ed8bd6d8d0"
 }
 
 ###
-
 
 POST http://localhost:3002/api/users HTTP/1.1
 Content-Type: application/json
 
 {
+  "username": "nbroussard - 8",
+  "name": "Nick",
+  "password": "1Bondsman@16!",
+  "blogs": []
+}
 
-  "user": "Nicholas Brou",
-  "comment": "Hello World! - POST - test",
-  "date": null,
-  "likes": 0
+###
 
+// POST http://localhost:3002/api/login HTTP/1.1
+// Content-Type: application/json
+
+//{
+ // "username": "nbroussard",
+  //"password": "pWord!"
+//}
+
+
+###
+
+POST http://localhost:3002/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "nbroussard - 2",
+  "password": "pWord!"
 }

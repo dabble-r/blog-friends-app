@@ -13,12 +13,12 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Blog'
     }
-  ],
+  ]
 })
 
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
+    returnedObject.userId = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
     // the passwordHash should not be revealed

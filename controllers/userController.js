@@ -1,38 +1,52 @@
 import User from '../models/user.js'
 import bcrypt from 'bcrypt'
+import express from 'express'
 
-const getUsers = async (req, res) => {
+const userRouter = express.Router()
+
+userRouter.get('/', async (req, res) => {
   try {
-      const users = await User.find({})
+      const users = await User.find({}).populate('blogs', {'comment': 1, 'likes': 1})
+      const findUser = users.map(el => el.username == "nbroussard - 1")
+      // console.log('ids', IDs)
+      console.log('user found', findUser)
       res.json(users)
       //console.log(res.json(blogs))
   } 
   catch (error) {
       res.status(500).json({ message: error.message })
   }
-}
+})
 
-const postUser = async (req, res) => {
-  try {
-    const { username, name, password } = req.body
+userRouter.get('/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const user = await User.findById(id)
+        res.json(user)
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
 
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(password, saltRounds)
 
-    const user = new User({
-      username,
-      name,
-      passwordHash,
-    })
+userRouter.post('/', async (request, response) => {
+  const { username, name, password, blogs } = request.body
 
-    const savedUser = await user.save()
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 
-    res.status(201).json(savedUser)
-  }
-  catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-}
+  const user = new User({
+    username,
+    name,
+    passwordHash,
+    blogs
+  })
+
+  const savedUser = await user.save()
+
+  response.status(201).json(savedUser)
+})
 
 /*
 
@@ -64,6 +78,6 @@ usersRouter.post('/', async (request, response) => {
 
 */
 
-// export { usersRouter }
+export { userRouter }
 
-export { getUsers, postUser }
+//export { getUsers, postUser }

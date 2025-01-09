@@ -1,10 +1,10 @@
-PUT http://localhost:3002/api/blogs/676b2994150a384a97360bf9 HTTP/1.1
+PUT http://localhost:3002/api/blogs/677da5dea650347296993253 HTTP/1.1
 Content-Type: application/json 
 
 {
   "id": "",
-  "user": "Nicholas B",
-  "comment": "Hello World - PUT test - 2!",
+  "username": "",
+  "comment": "put test - 32",
   "date": null,
   "likes": 0
 }

@@ -3,6 +3,7 @@ import assert from 'node:assert'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../server.js'
+import jwt from 'jsonwebtoken'
 import { initialBlogs, nonExistingId, blogsInDb } from '../utils/tests_helper.js'
 
 const api = supertest(app)
@@ -35,6 +36,15 @@ describe('test for all blogs resources', () => {
 
     assert.strictEqual(response.body.length, initialBlogs.length)
   })
+
+  // test for get all returns correct number of blog items from DB
+  test('total blogs returned - correct count/length', async () => {
+    const blogsRes = await api.get('/api/blogs')
+      
+    const blogsDB = await blogsInDb()
+
+    assert.strictEqual(blogsRes.body.length, blogsDB.length)
+  })
 })
 
 //////////////////////////////////////////////////////////////////////
@@ -42,10 +52,11 @@ describe('test for all blogs resources', () => {
 describe('test for one valid/malformed blogs resource', () => {
   // tests for blog prop 
   // checks 'id' prop of each blog is literally id
-  test('id is really id', async () => {
+  test('d is really id', async () => {
     const response = await api.get('/api/blogs')
 
     const blogIDs = response.body.map(el => el.id).filter(el => el != 'id')
+    //console.log(blogIDS)
 
     assert.strictEqual(response.body.length, blogIDs.length)
   })
@@ -150,6 +161,8 @@ describe('tests for one specific blogs resource', () => {
     assert(firstElContents.includes('I like Jason because he travels to places.'))
   })
 })
+
+
 
 after(async () => {
   await mongoose.connection.close()
