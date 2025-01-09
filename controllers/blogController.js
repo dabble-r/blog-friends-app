@@ -147,12 +147,14 @@ blogRouter.put('/:id', async (req, res, next) => {
             //console.log('user', user)
             //console.log('decoded token id', decodedToken.id)
             if (user == decodedToken.id) {
+                alert('You can only like/dislike someone else\'s comment!')
                 return res.status(401).json({error: "Likes Change - ID match"})
             }
         }
         
         if (origLikes == likes) {
             if (user != decodedToken.id) {
+                alert('You can only update your own comments!')
                 return res.status(401).json({ error: "No Likes Change - ID no match user/blog" })
             } 
         }
