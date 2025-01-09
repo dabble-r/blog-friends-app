@@ -13,7 +13,7 @@ const requestLogger = (request, response, next) => {
 
 const extractToken = (req, res, next) => {
   const authorization = req.get('authorization');
-  console.log('authorization header:', authorization);
+  // console.log('authorization header:', authorization);
   
   if (authorization && authorization.startsWith('Bearer ')) {
     // console.log('extract reaches if statement/block')

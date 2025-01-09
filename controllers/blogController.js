@@ -3,6 +3,7 @@ import User from '../models/user.js'
 import mongoose from 'mongoose'
 import express from 'express'
 import jwt from 'jsonwebtoken'
+import testHelpers from '../utils/tests_helper.js'
 
 const blogRouter = express.Router()
 
@@ -113,10 +114,10 @@ blogRouter.post('/', async (req, res, next) => {
 })
 
 blogRouter.put('/:id', async (req, res, next) => {
-    console.log('req token', req.headers.Authorization)
+    // console.log('req token', req.headers.Authorization)
     
     try {
-        console.log('token from request header', req.token)
+        // console.log('token from request header', req.token)
         const decodedToken = jwt.verify(req.token, process.env.SECRET)
         
         // catch an invalid token
@@ -128,27 +129,43 @@ blogRouter.put('/:id', async (req, res, next) => {
 
         const { user, date, comment, likes } = req.body
         const id = req.params.id
-        
+
+        const origLikes = await testHelpers.blogInDbLikes(id)
+        console.log('original likes', origLikes)
+        console.log('new likes', likes)
+
         const updateBlog = await Blog.findByIdAndUpdate(
             id, 
             { user, date, comment, likes },  
             { new: true,
               runValidators: true,
               context: 'query'
-            })
+        })
+        
+        if (likes != origLikes) {
+            // console.log('likes update')
+            console.log('user', user)
+            console.log('decoded token id', decodedToken.id)
+            if (user == decodedToken.id) {
+                return res.status(401).json({error: "Likes Change - ID match"})
+            }
+        }
+        
+        if (origLikes == likes) {
+            if (user != decodedToken.id) {
+                return res.status(401).json({ error: "No Likes Change - ID no match user/blog" })
+            } 
+        }
+        
         if (!updateBlog) {
             return res.status(404).json({ error: "Blog not found" })
         }
-
-        if (updateBlog.user != decodedToken.id) {
-            return res.status(401).json({ error: "Unauthorized Access!" })
-        }
+        await updateBlog.save()
         res.json(updateBlog)
     } 
     catch (error) {
         next(error)
     }
-    
 })
 
 blogRouter.delete('/:id', async (req, res, next) => {
