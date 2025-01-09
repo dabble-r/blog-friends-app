@@ -212,7 +212,7 @@ blogRouter.delete('/:id', async (req, res, next) => {
             res.status(200).send('Blog deleted!')
         } 
         else {
-            console.log('no user access!')
+            console.log('Unauthorized!')
             res.status(401).json({ error: "Unauthorized: User does not have access!" })
         }
 
