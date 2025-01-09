@@ -61,9 +61,9 @@ blogRouter.post('/', async (req, res, next) => {
     // console.log('body id', body.userId)
     // console.log('body username', body.username)
     // console.log('token from request', req.headers.authorization)
-    console.log('token from request header', req.token)
+    //console.log('token from request header', req.token)
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
-    console.log('decoded token', decodedToken)
+    //console.log('decoded token', decodedToken)
     if (!decodedToken.id) {
         return res.status(401).json({ error: 'token invalid' })
     }
@@ -123,7 +123,7 @@ blogRouter.put('/:id', async (req, res, next) => {
         // catch an invalid token
         if (!decodedToken) {
             console.log('Invalid User Token!')
-            console.log('decoded token', decodedToken)
+            //console.log('decoded token', decodedToken)
             return res.status(400).send('Invalid token!')
         }
 
@@ -131,8 +131,8 @@ blogRouter.put('/:id', async (req, res, next) => {
         const id = req.params.id
 
         const origLikes = await testHelpers.blogInDbLikes(id)
-        console.log('original likes', origLikes)
-        console.log('new likes', likes)
+        //console.log('original likes', origLikes)
+        //console.log('new likes', likes)
 
         const updateBlog = await Blog.findByIdAndUpdate(
             id, 
@@ -144,8 +144,8 @@ blogRouter.put('/:id', async (req, res, next) => {
         
         if (likes != origLikes) {
             // console.log('likes update')
-            console.log('user', user)
-            console.log('decoded token id', decodedToken.id)
+            //console.log('user', user)
+            //console.log('decoded token id', decodedToken.id)
             if (user == decodedToken.id) {
                 return res.status(401).json({error: "Likes Change - ID match"})
             }
@@ -172,19 +172,19 @@ blogRouter.delete('/:id', async (req, res, next) => {
     
     try {
         const decodedToken = req.decodedToken
-        console.log('decoded token - delete', decodedToken)
+        //console.log('decoded token - delete', decodedToken)
 
         // catch a malformed or invalid ID
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             console.log('Invalid Blog ID!')
-            console.log('id', req.params.id)
+            //console.log('id', req.params.id)
             return res.status(400).send('Invalid Blog ID!')
         }
 
         // catch an invalid token
         if (!decodedToken) {
             console.log('Invalid User Token!')
-            console.log('decoded token', decodedToken)
+            //console.log('decoded token', decodedToken)
             return res.status(400).send('Invalid token!')
         }
 
@@ -195,13 +195,13 @@ blogRouter.delete('/:id', async (req, res, next) => {
             console.log("Blog doesn't exist!");
             return res.status(200).send('Blog already deleted or not found!');
         }
-        console.log('blog to delete', blog)
+        //console.log('blog to delete', blog)
         // decoded token of user making request
         const userAccess = req.decodedToken.id
         // user id of the blog item being accessed
         const blogItemUser = blog.user.toString()
-        console.log('user access id', userAccess)
-        console.log('blog item user id', blogItemUser)
+        //console.log('user access id', userAccess)
+        //console.log('blog item user id', blogItemUser)
 
         // check the blog item user id against the user id accessing blog item
         if (blogItemUser == userAccess) {
@@ -242,7 +242,7 @@ blogRouter.delete('/', async (req, res, next) => {
         
         console.log(users)
         
-        res.status(200).send('all blogs deletedm from Blogs cluster and User arrays !')
+        res.status(200).send('all blogs deleted from Blogs cluster and User arrays !')
     }
     catch (error) {
         console.error('Error deleting all the blogs: ', error.message)

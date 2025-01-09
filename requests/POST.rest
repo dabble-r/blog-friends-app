@@ -16,22 +16,42 @@ POST http://localhost:3002/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "nbroussard - 8",
+  "username": "nbroussard",
   "name": "Nick",
-  "password": "1Bondsman@16!",
+  "password": "1Bondsman!",
   "blogs": []
 }
 
-###
+//Jason Fisher Credentials
+//"username": "jason_traveler",
+//"name": "Jason",
+//"password": "daddy_thirst",
+//"blogs": []
 
-// POST http://localhost:3002/api/login HTTP/1.1
-// Content-Type: application/json
+//Alex Thomsen Credentials
+//"username": "alex_bigman",
+//"name": "Alex",
+//"password": "imsogayrightnow",
+//"blogs": []
 
+//Elon Richman Credentials
+ //"username": "elon_psych",
+ // "name": "Elon",
+//"password": "Pword!25",
+//"blogs": []
+
+//Ryan Fisher credentials
+//  "username": "ry_ry_guy",
+//  "name": "Ryan",
+//  "password": "pWord!",
+//  "blogs": []
+//
+
+//Nick Broussard Credentials
 //{
  // "username": "nbroussard",
   //"password": "pWord!"
 //}
-
 
 ###
 
@@ -39,6 +59,6 @@ POST http://localhost:3002/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "nbroussard - 2",
+  "username": "ryan",
   "password": "pWord!"
 }
