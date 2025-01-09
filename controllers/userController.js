@@ -9,7 +9,7 @@ userRouter.get('/', async (req, res) => {
       const users = await User.find({}).populate('blogs', {'comment': 1, 'likes': 1})
       const findUser = users.map(el => el.username == "nbroussard - 1")
       // console.log('ids', IDs)
-      console.log('user found', findUser)
+      //console.log('user found', findUser)
       res.json(users)
       //console.log(res.json(blogs))
   } 
@@ -27,6 +27,22 @@ userRouter.get('/:id', async (req, res) => {
     catch (error) {
         res.status(500).json({ message: error.message })
     }
+})
+
+userRouter.delete('/', async (req, res, next) => {
+  try {
+    // users in DB
+    const users = await User.deleteMany({})
+    // log to console total number of users deleted
+    //console.log('users', users)
+    console.log(`all ${users.deletedCount} blogs deleted!`)
+
+    res.status(200).send('All users deleted from Users cluster!')
+  }
+  catch (error) {
+    console.error('Error deleting all the blogs: ', error.message)
+    next(error)
+  }
 })
 
 
