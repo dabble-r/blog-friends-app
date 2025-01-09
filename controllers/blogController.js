@@ -133,15 +133,6 @@ blogRouter.put('/:id', async (req, res, next) => {
         const origLikes = await testHelpers.blogInDbLikes(id)
         //console.log('original likes', origLikes)
         //console.log('new likes', likes)
-
-        const updateBlog = await Blog.findByIdAndUpdate(
-            id, 
-            { user, date, comment, likes },  
-            { new: true,
-              runValidators: true,
-              context: 'query'
-        })
-        
         if (likes != origLikes) {
             // console.log('likes update')
             //console.log('user', user)
@@ -151,13 +142,21 @@ blogRouter.put('/:id', async (req, res, next) => {
                 return res.status(401).json({error: "Likes Change - ID match"})
             }
         }
-        
+
         if (origLikes == likes) {
             if (user != decodedToken.id) {
                 console.log('You can only update your own comments!')
                 return res.status(401).json({ error: "No Likes Change - ID no match user/blog" })
             } 
         }
+
+        const updateBlog = await Blog.findByIdAndUpdate(
+            id, 
+            { user, date, comment, likes },  
+            { new: true,
+              runValidators: true,
+              context: 'query'
+        })
         
         if (!updateBlog) {
             return res.status(404).json({ error: "Blog not found" })
